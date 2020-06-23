@@ -2,26 +2,29 @@
     ViewBag.Title = "Home Page";
 }
 
-    <div class="jumbotron">
-        <img src="~/img/logo2_.png" width="300" />
-        <h1>Ottawa Park Explorer</h1>
-        <p class="lead"></p>
-        <p><a href="https://ottawa.ca/en/recreation-and-parks/parks-and-green-space" class="btn btn-primary btn-lg">Learn more&raquo;</a></p>
+    <div class="jumbotron" id="top">        
+        <h1>Cinema Explorer</h1>
+        <div class="covidInfo">
+            <h4>COVID-19 INFO:</h4>
+            <h5>THE MAJORITY OF CINEMAS / MOVIE THEATERS AROUND THE GLOBE AND IN CANADA ARE CURRENTLY CLOSED DUE TO THE CORONOVIRUS.<br />AS A RESULT OUR APIS REQUESTS MAY NOT RETURN CORRECT INFORMATION.</h5>
+        </div>
     </div>
 
 <div class="row">
     <div class="col-md-12">
-        <h2>Your Location:</h2>
-        <div class="col-md-4">325 Boulevard de la Cité-des-Jeunes<br />Gatineau, Quebec J8Y 6T3</div>
+        <div>
+            <h2 id="userLocation">Your Location:</h2>            
+        </div>        
+        <div class="col-md-4"></div>
         <div class="col-md-4">
-            <label>Find parks in range</label>
+            <label>Find cinemas in range</label>
             <select id="range">
-                <option value="5" selected>5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
+                <option value="50" selected>50</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+                <option value="2500">2500</option>
+                <option value="5000">5000</option>
             </select>
             <span>km</span>
         </div>
@@ -31,10 +34,10 @@
 <div class="row">
     <div class="col-md-3">
         <div>
-            <h2>Parks (<span id="counter"></span>)</h2>
+            <h2>Cinemas (<span id="counter"></span>)</h2>
         </div>
         
-        <div id="parkList" style="overflow-y: scroll; height:600px;"></div>
+        <div id="cinemaList" style="overflow-y: scroll; height:600px;"></div>
     </div>
     <div class="col-md-8">
         <h2>Map</h2>

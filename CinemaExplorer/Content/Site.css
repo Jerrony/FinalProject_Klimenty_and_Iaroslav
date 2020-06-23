@@ -24,9 +24,47 @@ textarea {
     max-width: 280px;
 }
 
-.park-item {
-    margin: 10px 0;
+.cinema-item {
+    margin-left: 10px;
 }
-.park-item:hover {
+
+.cinema-item:hover {
+    background: #DDD;        
+}
+
+#cinemaName {
+    cursor: pointer;
+} 
+
+.location.label {
+    margin-left: 10px;
+}
+
+#top {
+    height: 360px;    
+    background-image: url('../img/cinema2.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.location {
+    padding-left: 18px;
+}
+
+label {
+    width: 100px;
+}
+
+#cinemaDetails {
+    padding-right: 50px;
+}
+
+.covidInfo {
+    position: relative;
+    top: 80px;
+    left: -20px;
     background: #DDD;
+    opacity: 0.9;
+    padding: 5px;
+    width: 1050px;
 }

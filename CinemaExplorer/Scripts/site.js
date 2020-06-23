@@ -1,5 +1,4 @@
-﻿let userLatitude;// = 45.455492;
-let userLongitude;// = -75.764443;
+﻿let userLatitude, userLongitude;
 
 var options = {
     enableHighAccuracy: true,
@@ -7,42 +6,47 @@ var options = {
     maximumAge: 0
 };
 
-
-
-
-function ShowOnMap(parkName, latitude, longitude) {
+function ShowOnMap(cinemaName, latitude, longitude) {
     if ($("#route").prop("checked")) {
-        $("#map").html("<img src='https://open.mapquestapi.com/staticmap/v5/map?start=" + userLatitude + "," + userLongitude + "&end=" + latitude + "," + longitude + "&key=k9HTG6O937BQskwhxQv5g3zxyU8d2D8D&banner=" + parkName + "&size=800,600' />");
+        $("#map").html("<img src='https://open.mapquestapi.com/staticmap/v5/map?start=" + userLatitude + "," + userLongitude + "&end=" + latitude + "," + longitude + "&key=k9HTG6O937BQskwhxQv5g3zxyU8d2D8D&banner=" + cinemaName + "&size=850,600' />");
     } else {
-        $("#map").html("<img src='https://open.mapquestapi.com/staticmap/v5/map?locations=" + userLatitude + "," + userLongitude + "||" + latitude + "," + longitude + "&key=k9HTG6O937BQskwhxQv5g3zxyU8d2D8D&banner=" + parkName + "&size=800,600' />");
+        $("#map").html("<img src='https://open.mapquestapi.com/staticmap/v5/map?locations=" + userLatitude + "," + userLongitude + "||" + latitude + "," + longitude + "&key=k9HTG6O937BQskwhxQv5g3zxyU8d2D8D&banner=" + cinemaName + "&size=850,600' />");
     }
 }
 
 $(function () {
     function GetLocation() {
-        $("#map").html("<img src='https://open.mapquestapi.com/staticmap/v5/map?locations=" + userLatitude + "," + userLongitude + "&key=k9HTG6O937BQskwhxQv5g3zxyU8d2D8D&banner=Your%20Location&size=800,600' />");
+        $("#map").html("<img src='https://open.mapquestapi.com/staticmap/v5/map?locations=" + userLatitude + "," + userLongitude + "&key=k9HTG6O937BQskwhxQv5g3zxyU8d2D8D&banner=Your%20Location&size=850,600' />");
+        $("#userLocation").append("<div class='location'><div><h4><label>Latitude:</label>" + userLatitude + "</h4></div>"
+            + "<div><h4><label>Longitude:</label>" + userLongitude + "</h4></div></div>"
+        );                
+    }    
 
-        getParkList();
-    }
+    function getCinemaList() {
+        $.ajaxSetup({
+            headers: {
+                'apikey': 'Rtg62UFwNintRmobP0JhlY8GpDJ0IK89'
+            }
+        });
+        //$.getJSON('https://api.internationalshowtimes.com/v4/cinemas/?countries=CA', function (data) {
+        $.getJSON('https://api.internationalshowtimes.com/v4/cinemas/?location=' + userLatitude + ',' + userLongitude + '&distance=' + $("#range").val(), function (data) {
+            console.log(data);
+            $("#cinemaList").empty();
 
-    function getParkList() {
-        $.getJSON("https://maps.ottawa.ca/arcgis/rest/services/Parks_Inventory/MapServer/24/query?where=1%3D1&outFields=*&outSR=4326&f=json", function (data) {
-            $("#parkList").empty();
             var counter = 0;
-            $.each(data.features, function (index, value) {
-                var from = { latitude: userLatitude, longitude: userLongitude };
-                var to = { latitude: value.attributes.LATITUDE, longitude: value.attributes.LONGITUDE };
-                value.attributes.DISTANCE = calculate(from, to);
-                if (parseFloat($("#range").val()) > value.attributes.DISTANCE) {
-                    $("#parkList").append("<div class='row park-item'><div><a onclick=\"ShowOnMap('" + value.attributes.NAME + "', '" + value.attributes.LATITUDE + "', '" + value.attributes.LONGITUDE + "');\">" + value.attributes.NAME + "</a></div>"
-                        + "<div>" + value.attributes.ADDRESS + "</div>"
-                        + "<div>Waterbody access: " + value.attributes.WATERBODY_ACCESS + "</div>"
-                        + "<div>Distance: " + value.attributes.DISTANCE + " km</div>");
-                    counter++;
-                }                
+            $.each(data.cinemas, function (index, value) {
+                    var from = { latitude: userLatitude, longitude: userLongitude };
+                    var to = { latitude: value.location.lat, longitude: value.location.lon };
+                    value.location.distance = calculate(from, to);
+
+                $("#cinemaList").append("<div class='cinema-item'><div><h3 id='cinemaName'><a onclick=\"ShowOnMap('" + value.name + "', '" + value.location.lat + "', '" + value.location.lon + "');\">" + value.name + "</a></h3></div>"
+                    + "<div id='cinemaDetails'><div><strong>Address: </strong>" + value.location.address.display_text + "</div>"
+                    + "<div><strong>Website: </strong><a href='" + value.website + "'>" + value.website +"</a></div>"
+                    + "<div><strong>Telephone: </strong><a href='tel:" + value.telephone + "'>" + value.telephone + "</a></div>"
+                    + "<div><strong>Distance: </strong> " + value.location.distance + " km</div></div>");
+                counter++;
             });
-            $("#counter").html(counter); 
-            console.log(counter);
+            $("#counter").html(counter);
         });
     }
 
@@ -50,7 +54,7 @@ $(function () {
         var fromFloat = { latitude: parseFloat(from.latitude), longitude: parseFloat(from.longitude) };
         var toFloat = { latitude: parseFloat(to.latitude), longitude: parseFloat(to.longitude) };
 
-        var R = 6371; // km
+        var R = 6371;
         var deltaLatitude = toRadian(toFloat.latitude - fromFloat.latitude);
         var deltaLongitude = toRadian(toFloat.longitude - fromFloat.longitude);
         var latitude1 = toRadian(fromFloat.latitude);
@@ -77,19 +81,16 @@ $(function () {
         userLongitude = crd.longitude;
         console.log(userLatitude);
 
-        //return crd;
-
         GetLocation();
+
+        getCinemaList();
     }
 
     function error(err) {
         console.warn(`ERROR(${err.code}): ${err.message}`);
     }
 
-
     navigator.geolocation.getCurrentPosition(success, error, options);
 
-    
-
-    $("#range").change(getParkList);
+    $("#range").change(getCinemaList);
 });
