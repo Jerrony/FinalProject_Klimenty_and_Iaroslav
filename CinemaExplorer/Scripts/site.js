@@ -40,10 +40,10 @@ $(function () {
                     value.location.distance = calculate(from, to);
 
                 $("#cinemaList").append("<div class='cinema-item'><div><h3 id='cinemaName'><a onclick=\"ShowOnMap('" + value.name + "', '" + value.location.lat + "', '" + value.location.lon + "');\">" + value.name + "</a></h3></div>"
-                    + "<div id='cinemaDetails'><div><strong>Address: </strong>" + value.location.address.display_text + "</div>"
-                    + "<div><strong>Website: </strong><a href='" + value.website + "'>" + value.website +"</a></div>"
-                    + "<div><strong>Telephone: </strong><a href='tel:" + value.telephone + "'>" + value.telephone + "</a></div>"
-                    + "<div><strong>Distance: </strong> " + value.location.distance + " km</div></div>");
+                    + "<div id='cinemaDetails'><div><strong>Address: </strong><br>" + value.location.address.display_text + "</div>"
+                    + "<div><strong>Website: </strong><br><a href='" + value.website + "'>" + value.website +"</a></div>"
+                    + "<div><strong>Telephone: </strong><br><a href='tel:" + value.telephone + "'>" + value.telephone + "</a></div>"
+                    + "<div><strong>Distance: </strong><br>" + value.location.distance + " km</div></div>");
                 counter++;
             });
             $("#counter").html(counter);
