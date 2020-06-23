@@ -137,8 +137,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="img\cinema.jpg" />
     <Content Include="img\cinema2.jpg" />
-    <Content Include="img\logo.jpg" />
-    <Content Include="img\logo2.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />

@@ -67,7 +67,6 @@ $(function () {
         return d.toFixed(1);
     }
 
-    // Converts numeric degrees to radians
     function toRadian(value) {
         return value * Math.PI / 180;
     }
